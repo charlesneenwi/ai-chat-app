@@ -33,7 +33,7 @@ function App() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "x-api-key": "YOUR_API_KEY_HERE",
+          "x-api-key": "MY_API_KEY_HERE",
           "anthropic-version": "2023-06-01",
         },
         body: JSON.stringify({
@@ -63,9 +63,11 @@ function App() {
   }
 
   const handleClear = () => {
+  if (window.confirm("Are you sure you want to clear the chat?")) {
     setMessages([])
     localStorage.removeItem("chat-messages")
   }
+}
 
   return (
     <div className="flex flex-col h-screen max-w-2xl mx-auto border border-gray-200 shadow-lg">
