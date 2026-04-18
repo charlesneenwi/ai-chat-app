@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react"
+import.meta.env.VITE_GEMINI_API_KEY
 import ChatWindow from "./components/ChatWindow"
 import ChatInput from "./components/ChatInput"
 
@@ -18,50 +19,54 @@ function App() {
   }, [messages])
 
   const handleSend = async () => {
-    const input = document.getElementById("chat-input")
-    const userMessage = input.value.trim()
-    if (!userMessage) return
+  const input = document.getElementById("chat-input")
+  const userMessage = input.value.trim()
+  if (!userMessage) return
 
-    const timestamp = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
-    const newMessages = [...messages, { role: "user", content: userMessage, timestamp }]
-    setMessages(newMessages)
-    input.value = ""
-    setIsLoading(true)
+  const timestamp = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+  const newMessages = [...messages, { role: "user", content: userMessage, timestamp }]
+  setMessages(newMessages)
+  input.value = ""
+  setIsLoading(true)
 
-    try {
-      const response = await fetch("https://api.anthropic.com/v1/messages", {
+  try {
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${import.meta.env.VITE_GEMINI_API_KEY}`,
+      {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "x-api-key": "MY_API_KEY_HERE",
-          "anthropic-version": "2023-06-01",
         },
         body: JSON.stringify({
-          model: "claude-haiku-4-5-20251001",
-          max_tokens: 1000,
-          system: SYSTEM_PROMPT,
-          messages: newMessages.map(({ role, content }) => ({ role, content })),
+          system_instruction: {
+            parts: [{ text: SYSTEM_PROMPT }]
+          },
+          contents: newMessages.map(({ role, content }) => ({
+            role: role === "assistant" ? "model" : "user",
+            parts: [{ text: content }]
+          }))
         }),
-      })
+      }
+    )
 
-      const data = await response.json()
-      const assistantMessage = data.content[0].text
-      const assistantTimestamp = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+    const data = await response.json()
+    console.log(data)
+    const assistantMessage = data.candidates[0].content.parts[0].text
+    const assistantTimestamp = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
 
-      setMessages([
-        ...newMessages,
-        { role: "assistant", content: assistantMessage, timestamp: assistantTimestamp },
-      ])
-    } catch (error) {
-      setMessages([
-        ...newMessages,
-        { role: "assistant", content: "Something went wrong. Please try again.", timestamp: "" },
-      ])
-    } finally {
-      setIsLoading(false)
-    }
+    setMessages([
+      ...newMessages,
+      { role: "assistant", content: assistantMessage, timestamp: assistantTimestamp },
+    ])
+  } catch (error) {
+    setMessages([
+      ...newMessages,
+      { role: "assistant", content: "Something went wrong. Please try again.", timestamp: "" },
+    ])
+  } finally {
+    setIsLoading(false)
   }
-
+}
   const handleClear = () => {
   if (window.confirm("Are you sure you want to clear the chat?")) {
     setMessages([])
