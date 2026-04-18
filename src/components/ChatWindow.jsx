@@ -1,54 +1,73 @@
 function TypingBubble() {
   return (
-    <div className="flex items-center gap-1 bg-gray-100 px-4 py-3 rounded-2xl rounded-bl-sm max-w-[75px]">
-      <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce [animation-delay:0ms]"></span>
-      <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce [animation-delay:150ms]"></span>
-      <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce [animation-delay:300ms]"></span>
+    <div className="flex flex-col gap-1 items-start">
+      <div style={{display: 'inline-flex', alignItems: 'center', gap: '5px', background: '#0f1f14', border: '1px solid #1a3322', borderRadius: '6px', padding: '3px 10px', fontSize: '11px', color: '#22c55e', marginBottom: '4px'}}>
+        <div style={{width: '6px', height: '6px', borderRadius: '50%', background: '#22c55e'}}></div>
+        Assistant
+      </div>
+      <div style={{display: 'flex', gap: '4px', alignItems: 'center', padding: '12px 16px', background: '#141414', border: '1px solid #222', borderRadius: '18px', borderBottomLeftRadius: '4px'}}>
+        <span style={{width: '6px', height: '6px', borderRadius: '50%', background: '#22c55e', display: 'inline-block', animation: 'bounce 1.2s infinite', animationDelay: '0ms'}}></span>
+        <span style={{width: '6px', height: '6px', borderRadius: '50%', background: '#22c55e', display: 'inline-block', animation: 'bounce 1.2s infinite', animationDelay: '200ms'}}></span>
+        <span style={{width: '6px', height: '6px', borderRadius: '50%', background: '#22c55e', display: 'inline-block', animation: 'bounce 1.2s infinite', animationDelay: '400ms'}}></span>
+      </div>
     </div>
   )
 }
 
 function ChatWindow({ messages, isLoading, bottomRef }) {
   return (
-    <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-3">
-      {messages.length === 0 && !isLoading ? (
-        <div className="text-center text-gray-400 mt-20">
-          Start a conversation...
-        </div>
-      ) : (
-        <>
-          {messages.map((message, index) => (
-            <div
-              key={index}
-              className={`flex flex-col gap-1 ${
-                message.role === "user" ? "items-end" : "items-start"
-              }`}
-            >
+    <>
+      <style>{`
+        @keyframes bounce {
+          0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+          30% { transform: translateY(-5px); opacity: 1; }
+        }
+      `}</style>
+      <div style={{flex: 1, overflowY: 'auto', padding: '20px', display: 'flex', flexDirection: 'column', gap: '16px', background: '#0a0a0a'}}>
+        {messages.length === 0 && !isLoading ? (
+          <div style={{textAlign: 'center', color: '#333', marginTop: '80px', fontSize: '14px'}}>
+            Start a conversation...
+          </div>
+        ) : (
+          <>
+            {messages.map((message, index) => (
               <div
-                className={`max-w-[75%] px-4 py-3 rounded-2xl text-sm leading-relaxed ${
-                  message.role === "user"
-                    ? "bg-blue-500 text-white rounded-br-sm"
-                    : "bg-gray-100 text-gray-800 rounded-bl-sm"
-                }`}
+                key={index}
+                style={{display: 'flex', flexDirection: 'column', gap: '4px', alignItems: message.role === 'user' ? 'flex-end' : 'flex-start'}}
               >
-                {message.content}
+                {message.role === 'assistant' && (
+                  <div style={{display: 'inline-flex', alignItems: 'center', gap: '5px', background: '#0f1f14', border: '1px solid #1a3322', borderRadius: '6px', padding: '3px 10px', fontSize: '11px', color: '#22c55e', marginBottom: '2px'}}>
+                    <div style={{width: '6px', height: '6px', borderRadius: '50%', background: '#22c55e'}}></div>
+                    Assistant
+                  </div>
+                )}
+                <div
+                  style={{
+                    maxWidth: '72%',
+                    padding: '11px 16px',
+                    fontSize: '14px',
+                    lineHeight: '1.6',
+                    borderRadius: '18px',
+                    ...(message.role === 'user'
+                      ? {background: '#16a34a', color: '#f0fdf4', borderBottomRightRadius: '4px'}
+                      : {background: '#141414', color: '#d4d4d4', border: '1px solid #222', borderBottomLeftRadius: '4px'})
+                  }}
+                >
+                  {message.content}
+                </div>
+                {message.timestamp && (
+                  <span style={{fontSize: '10px', color: '#333', padding: '0 4px'}}>
+                    {message.timestamp}
+                  </span>
+                )}
               </div>
-              {message.timestamp && (
-                <span className="text-xs text-gray-400 px-1">
-                  {message.timestamp}
-                </span>
-              )}
-            </div>
-          ))}
-          {isLoading && (
-            <div className="flex items-start">
-              <TypingBubble />
-            </div>
-          )}
-        </>
-      )}
-      <div ref={bottomRef} />
-    </div>
+            ))}
+            {isLoading && <TypingBubble />}
+          </>
+        )}
+        <div ref={bottomRef} />
+      </div>
+    </>
   )
 }
 

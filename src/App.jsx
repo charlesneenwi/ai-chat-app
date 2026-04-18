@@ -75,12 +75,18 @@ function App() {
 }
 
   return (
-    <div className="flex flex-col h-screen max-w-2xl mx-auto border border-gray-200 shadow-lg">
-      <div className="p-4 border-b border-gray-200 bg-blue-500 flex items-center justify-between">
-        <h1 className="text-white font-semibold text-lg">AI Chat</h1>
+    <div className="flex flex-col h-screen max-w-2xl mx-auto" style={{background: '#0a0a0a', border: '1px solid #1a1a1a', borderRadius: '16px', margin: '20px auto', height: 'calc(100vh - 40px)'}}>
+      <div className="flex items-center justify-between px-5 py-4" style={{background: '#0d0d0d', borderBottom: '1px solid #1f1f1f'}}>
+        <div className="flex items-center gap-3">
+          <div style={{width: '8px', height: '8px', borderRadius: '50%', background: '#22c55e', boxShadow: '0 0 6px #22c55e88'}}></div>
+          <div>
+            <div style={{fontSize: '15px', fontWeight: '500', color: '#f0f0f0', letterSpacing: '0.3px'}}>AI Assistant</div>
+            <div style={{fontSize: '11px', color: '#22c55e', marginTop: '1px'}}>Powered by Gemini</div>
+          </div>
+        </div>
         <button
           onClick={handleClear}
-          className="text-white text-sm opacity-75 hover:opacity-100 transition-opacity"
+          style={{fontSize: '12px', color: '#444', background: 'none', border: '1px solid #222', padding: '5px 12px', borderRadius: '20px', cursor: 'pointer'}}
         >
           Clear chat
         </button>
