@@ -14,7 +14,7 @@ function ChatInput({ onSend, isLoading }) {
         placeholder="Type a message..."
         disabled={isLoading}
         onKeyDown={handleKeyDown}
-        style={{flex: 1, background: '#141414', border: '1px solid #222', borderRadius: '24px', padding: '10px 18px', fontSize: '14px', color: '#d4d4d4', outline: 'none', fontFamily: 'inherit', opacity: isLoading ? 0.5 : 1}}
+        style={{flex: 1, background: '#141414', border: '1px solid #222', borderRadius: '24px', padding: '10px 18px', fontSize: '16px', color: '#d4d4d4', outline: 'none', fontFamily: 'inherit', opacity: isLoading ? 0.5 : 1}}
       />
       <button
         onClick={onSend}
