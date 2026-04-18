@@ -1,10 +1,12 @@
 function ChatInput({ onSend, isLoading }) {
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter" && !e.shiftKey && !isLoading) {
-      e.preventDefault()
-      onSend()
-    }
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
+
+const handleKeyDown = (e) => {
+  if (e.key === "Enter" && !e.shiftKey && !isLoading && !isMobile) {
+    e.preventDefault()
+    onSend()
   }
+}
 
   return (
     <div style={{background: '#0d0d0d', borderTop: '1px solid #1a1a1a', padding: '14px 16px', display: 'flex', gap: '10px', alignItems: 'center'}}>
