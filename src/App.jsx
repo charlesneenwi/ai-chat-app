@@ -75,7 +75,7 @@ function App() {
 }
 
   return (
-    <div className="flex flex-col h-screen max-w-2xl mx-auto" style={{background: '#0a0a0a', border: '1px solid #1a1a1a', borderRadius: '16px', margin: '20px auto', height: 'calc(100vh - 40px)'}}>
+    <div className="flex flex-col" style={{background: '#0a0a0a', border: '1px solid #1a1a1a', borderRadius: '16px', margin: '0 auto', height: '100dvh', width: '100%', maxWidth: '680px'}}>
       <div className="flex items-center justify-between px-5 py-4" style={{background: '#0d0d0d', borderBottom: '1px solid #1f1f1f'}}>
         <div className="flex items-center gap-3">
           <div style={{width: '8px', height: '8px', borderRadius: '50%', background: '#22c55e', boxShadow: '0 0 6px #22c55e88'}}></div>
